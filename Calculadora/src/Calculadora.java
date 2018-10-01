@@ -5,6 +5,9 @@
 * -labels: numero actual (y resultado). numero anterior(acumulado)y la operacion que
  * se va a realizar.*/
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
 
@@ -216,13 +219,20 @@ class View extends JPanel {
         igual.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,6);
         gc.gridwidth=2;
-        igual.addActionListener(e->Controller.clickIgual());
+        igual.addActionListener(e-> {
+            try {
+                Controller.clickIgual();
+            } catch (ScriptException e1) {
+                e1.printStackTrace();
+            }
+        });
         this.add(igual,gc);
     }
 }
 
 
 class Controller{
+    static String error = "No se puede dividir por 0";
     static boolean comaFlag=false;
     static String operacion;
     static boolean operacionFlag=false;
@@ -268,6 +278,7 @@ class Controller{
         if (!operacionFlag){
             operacion = "/";
             operacionFlag = true;
+            comaFlag=false;
             View.display.setText(getDisplay()+"/");
         }
     }
@@ -279,16 +290,19 @@ class Controller{
     static void clickNum7() {
         System.out.println("7");
         View.display.setText(getDisplay()+"7");
+        operacionFlag=false;
     }
 
     static void clickNum8() {
         System.out.println("8");
         View.display.setText(getDisplay()+"8");
+        operacionFlag=false;
     }
 
     static void clickNum9() {
         System.out.println("9");
         View.display.setText(getDisplay()+"9");
+        operacionFlag=false;
     }
 
     static void clickMultiplicar() {
@@ -296,29 +310,34 @@ class Controller{
         if (!operacionFlag){
             operacion = "x";
             operacionFlag = true;
-            View.display.setText(getDisplay()+"x");
+            comaFlag=false;
+            View.display.setText(getDisplay()+"*");
         }
     }
 
     static void clickNum4() {
         System.out.println("4");
         View.display.setText(getDisplay()+"4");
+        operacionFlag=false;
     }
 
     static void clickNum5() {
         System.out.println("5");
         View.display.setText(getDisplay()+"5");
+        operacionFlag=false;
     }
 
     static void clickNum6() {
         System.out.println("6");
         View.display.setText(getDisplay()+"6");
+        operacionFlag=false;
     }
 
     static void clickRestar() {
-        if (!(operacionFlag||getDisplay().equals("-"))){
+        if (!(operacionFlag||getDisplay().equals("-")||getDisplay().equals(error))){
             operacion = "-";
             operacionFlag = true;
+            comaFlag=false;
             System.out.println("-");
             View.display.setText(getDisplay()+"-");
         }
@@ -327,22 +346,26 @@ class Controller{
     static void clickNum1() {
         System.out.println("1");
         View.display.setText(getDisplay()+"1");
+        operacionFlag=false;
     }
 
     static void clickNum2() {
         System.out.println("2");
         View.display.setText(getDisplay()+"2");
+        operacionFlag=false;
     }
 
     static void clickNum3() {
         System.out.println("3");
         View.display.setText(getDisplay()+"3");
+        operacionFlag=false;
     }
 
     static void clickSumar() {
-        if (!(operacionFlag||getDisplay().equals(""))) {
+        if (!(operacionFlag||getDisplay().equals("")||getDisplay().equals(error))) {
             operacion = "+";
             operacionFlag = true;
+            comaFlag=false;
             System.out.println("+");
             View.display.setText(getDisplay() + "+");
         }
@@ -350,26 +373,33 @@ class Controller{
     }
 
     static void clickNum0() {
-        System.out.println("0");
-        if(!(getDisplay().equals("0")||getDisplay().equals(""))){
+
+        if(!(getDisplay().equals("0")||getDisplay().equals("")||getDisplay().equals(error))){
             View.display.setText(getDisplay()+"0");
+            System.out.println("0");
+            operacionFlag=false;
         }
     }
 
     static void clickComa() {
-        System.out.println(",");
         if (!comaFlag) {
-            if (getDisplay().equals("")) {
+            if (getDisplay().equals("")||getDisplay().equals(error)) {
                 View.display.setText("0,");
                 comaFlag = true;
             } else {
                 View.display.setText(getDisplay() + ",");
                 comaFlag = true;
             }
+            System.out.println(",");
         }
     }
 
-    static void clickIgual() {
+    static void clickIgual() throws ScriptException {
         System.out.println("=");
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        Object parcial = engine.eval(getDisplay());
+
+        View.display.setText(parcial.toString());
     }
 }
