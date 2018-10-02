@@ -16,15 +16,15 @@ public class Calculadora {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> View.crearVentana());
+        Double test = Double.parseDouble("37.5");
+        System.out.println(test);
     }
 }
 
 
 class View extends JPanel {
     static JTextField display = new JTextField("");
-    static void update(){
-        //display.setText(Controller.signo);
-    }
+
     static void crearVentana() {
         //Opciones básicas
         JFrame ventana = new JFrame();
@@ -50,6 +50,12 @@ class View extends JPanel {
         gc.weightx=pesox;
         gc.weighty=pesoy;
     }
+    static void update(){
+        String salida = Double.toString(Controller.num2);
+        display.setText(Controller.input.toString());
+        System.out.println("num2 "+Controller.num2);
+        System.out.println("num1 "+Controller.num1);
+    }
      View(){
         this.setLayout(new GridBagLayout());
         this.setBackground(new Color(66,66,66));
@@ -60,41 +66,16 @@ class View extends JPanel {
         display.setHorizontalAlignment(SwingConstants.RIGHT);
         gc.anchor=GridBagConstraints.EAST;
         gc.gridwidth=4;
-        posicionCelda(0,0,2,2);
+        gc.gridheight=2;
+        posicionCelda(0,0,1,1);
         this.add(display,gc);
 
 
         //     -----BOTONES-----
         gc.anchor=GridBagConstraints.CENTER;
         gc.gridwidth=1;
+        gc.gridheight=1;
         this.gc.insets= new Insets(1,1,1,1);
-        //Y=1
-        //
-
-        JButton porcentaje = new JButton("%");
-        porcentaje.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(0,1,1,1);
-        porcentaje.addActionListener(e-> Controller.clickPorcentaje());
-        this.add(porcentaje,gc);
-        //
-        JButton raiz = new JButton("√ ");
-        raiz.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(1,1);
-        raiz.addActionListener(e-> Controller.clickRaiz());
-        this.add(raiz,gc);
-        //
-        JButton potencia = new JButton("X²");
-        potencia.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(2,1);
-        potencia.addActionListener(e-> Controller.clickPotencia());
-        this.add(potencia,gc);
-        //
-        JButton inverso = new JButton("1/X");
-        inverso.setFont(new Font("Tahoma",Font.PLAIN,20));
-        inverso.addActionListener(e->Controller.clickInverso());
-        posicionCelda(3,1);
-        this.add(inverso,gc);
-
         //             Y=2
         //
         JButton allClear = new JButton("AC");
@@ -106,20 +87,23 @@ class View extends JPanel {
         JButton clear = new JButton("C");
         clear.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(1,2);
+        clear.setBorderPainted(false);
+        clear.setFocusPainted(false);
         clear.addActionListener(e-> Controller.clickClear());
         this.add(clear,gc);
         //
-        JButton back = new JButton("<—");
-        back.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(2,2);
-        back.addActionListener(e-> Controller.clickBack());
-        this.add(back,gc);
+         JButton raiz = new JButton("√");
+         raiz.setFont(new Font("Tahoma",Font.PLAIN,20));
+         posicionCelda(2,2);
+         raiz.addActionListener(e-> Controller.clickRaiz());
+         this.add(raiz,gc);
         //
-        JButton dividir = new JButton("/");
-        dividir.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(3,2);
-        dividir.addActionListener(e-> Controller.clickDividir());
-        this.add(dividir,gc);
+         JButton potencia = new JButton("X²");
+         potencia.setFont(new Font("Tahoma",Font.PLAIN,20));
+         posicionCelda(3,2);
+         potencia.addActionListener(e-> Controller.clickPotencia());
+         this.add(potencia,gc);
+
 
         //               Y=3
         //
@@ -140,12 +124,12 @@ class View extends JPanel {
         posicionCelda(2,3);
         num9.addActionListener(e->Controller.clickNum9());
         this.add(num9,gc);
-        //
-        JButton multiplicar = new JButton("X");
-        multiplicar.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(3,3);
-        multiplicar.addActionListener(e->Controller.clickMultiplicar());
-        this.add(multiplicar,gc);
+         //
+         JButton dividir = new JButton("/");
+         dividir.setFont(new Font("Tahoma",Font.PLAIN,20));
+         posicionCelda(3,3);
+         dividir.addActionListener(e-> Controller.clickDividir());
+         this.add(dividir,gc);
 
         //Y=4
         //
@@ -167,11 +151,11 @@ class View extends JPanel {
         num6.addActionListener(e->Controller.clickNum6());
         this.add(num6,gc);
         //
-        JButton restar = new JButton("—");
-        restar.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(3,4);
-        restar.addActionListener(e->Controller.clickRestar());
-        this.add(restar,gc);
+         JButton multiplicar = new JButton("X");
+         multiplicar.setFont(new Font("Tahoma",Font.PLAIN,20));
+         posicionCelda(3,4);
+         multiplicar.addActionListener(e->Controller.clickMultiplicar());
+         this.add(multiplicar,gc);
 
         //Y=5
         //
@@ -193,15 +177,16 @@ class View extends JPanel {
         num3.addActionListener(e->Controller.clickNum3());
         this.add(num3,gc);
         //
-        JButton sumar = new JButton("+");
-        sumar.setFont(new Font("Tahoma",Font.PLAIN,20));
-        posicionCelda(3,5);
-        sumar.addActionListener(e->Controller.clickSumar());
-        this.add(sumar,gc);
+         JButton restar = new JButton("—");
+         restar.setFont(new Font("Tahoma",Font.PLAIN,20));
+         posicionCelda(3,5);
+         restar.addActionListener(e->Controller.clickRestar());
+         this.add(restar,gc);
+
 
         //Y=6
         //
-         JButton coma = new JButton(",");
+         JButton coma = new JButton(".");
          coma.setFont(new Font("Tahoma",Font.PLAIN,20));
          posicionCelda(0,6);
          coma.addActionListener(e->Controller.clickComa());
@@ -218,7 +203,6 @@ class View extends JPanel {
         JButton igual = new JButton("=");
         igual.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,6);
-        gc.gridwidth=2;
         igual.addActionListener(e-> {
             try {
                 Controller.clickIgual();
@@ -227,6 +211,11 @@ class View extends JPanel {
             }
         });
         this.add(igual,gc);
+         JButton sumar = new JButton("+");
+         sumar.setFont(new Font("Tahoma",Font.PLAIN,20));
+         posicionCelda(3,6);
+         sumar.addActionListener(e->Controller.clickSumar());
+         this.add(sumar,gc);
     }
 }
 
@@ -236,26 +225,53 @@ class Controller{
     static boolean comaFlag=false;
     static String operacion;
     static boolean operacionFlag=false;
+    static double num1=0;
+    static double num2=0;
+    static StringBuffer input= new StringBuffer();
+
+
     static String getDisplay(){
         return View.display.getText();
     }
-    static String acumulado;
-    static void  clickInverso(){
-        System.out.println("Inverso");
-    }
-
-    static void clickPorcentaje() {
-        System.out.println("Porcentaje");
+    static void operar(){
+        num1 = Double.parseDouble(input.delete(input.length()-1,input.length()).toString());
+        input.delete(0,input.length());
+        switch(operacion){
+            case "*":num2=num1*num2;
+            break;
+            case "+":num1=num1+num2;
+            break;
+            case "-":num1=num1-num2;
+            break;
+            case "/":num1=num1/num2;
+            break;
+            case "raiz": num2=Math.sqrt(num2);
+            break;
+            case "potencia": num2=Math.pow(num2,2);
+            break;
+        }
+        operacionFlag=false;
+        operacion="";
+        View.update();
     }
 
     static void clickPotencia() {
         System.out.println("Potencia");
+        if (!operacionFlag){
+            operacion = "potencia";
+            operacionFlag = true;
+            comaFlag=false;
+            //input.append("");
+            operar();
+        }
     }
 
     static void clickAllClear() {
         System.out.println("AllClear");
-        View.display.setText("");
-        acumulado="";
+        input.delete(0,input.length());
+        num1=0;
+        num2=0;
+        View.update();
         comaFlag=false;
         operacionFlag=false;
         operacion="";
@@ -263,15 +279,13 @@ class Controller{
 
     static void clickClear() {
         System.out.println("Clear");
-        View.display.setText("");
+        input.delete(0,input.length());
+        View.update();
         comaFlag=false;
         operacionFlag=false;
         operacion="";
     }
 
-    static void clickBack() {
-        System.out.println("Back");
-    }
 
     static void clickDividir() {
         System.out.println("Dividir");
@@ -279,29 +293,40 @@ class Controller{
             operacion = "/";
             operacionFlag = true;
             comaFlag=false;
-            View.display.setText(getDisplay()+"/");
+            input.append("/");
+            operar();
         }
     }
 
     static void clickRaiz() {
         System.out.println("Raiz");
+        if (!operacionFlag){
+            operacion = "raiz";
+            operacionFlag = true;
+            comaFlag=false;
+            //input.append("");
+            operar();
+        }
     }
 
     static void clickNum7() {
         System.out.println("7");
-        View.display.setText(getDisplay()+"7");
+        input.append("7");
+        View.update();
         operacionFlag=false;
     }
 
     static void clickNum8() {
         System.out.println("8");
-        View.display.setText(getDisplay()+"8");
+        input.append("8");
+        View.update();
         operacionFlag=false;
     }
 
     static void clickNum9() {
         System.out.println("9");
-        View.display.setText(getDisplay()+"9");
+        input.append("9");
+        View.update();
         operacionFlag=false;
     }
 
@@ -311,25 +336,30 @@ class Controller{
             operacion = "x";
             operacionFlag = true;
             comaFlag=false;
-            View.display.setText(getDisplay()+"*");
+            input.append("*");
+            operar();
         }
     }
 
     static void clickNum4() {
         System.out.println("4");
-        View.display.setText(getDisplay()+"4");
+        input.append("4");
+        View.update();
         operacionFlag=false;
     }
 
     static void clickNum5() {
         System.out.println("5");
-        View.display.setText(getDisplay()+"5");
+        input.append("5");
+        View.update();
+
         operacionFlag=false;
     }
 
     static void clickNum6() {
         System.out.println("6");
-        View.display.setText(getDisplay()+"6");
+        input.append("6");
+        View.update();
         operacionFlag=false;
     }
 
@@ -339,25 +369,28 @@ class Controller{
             operacionFlag = true;
             comaFlag=false;
             System.out.println("-");
-            View.display.setText(getDisplay()+"-");
+            input.append("-");
+            operar();
         }
     }
 
     static void clickNum1() {
         System.out.println("1");
-        View.display.setText(getDisplay()+"1");
+        input.append("1");
+        View.update();
         operacionFlag=false;
     }
 
     static void clickNum2() {
-        System.out.println("2");
-        View.display.setText(getDisplay()+"2");
+        input.append("2");
+        View.update();
         operacionFlag=false;
     }
 
     static void clickNum3() {
         System.out.println("3");
-        View.display.setText(getDisplay()+"3");
+        input.append("3");
+        View.update();
         operacionFlag=false;
     }
 
@@ -367,7 +400,8 @@ class Controller{
             operacionFlag = true;
             comaFlag=false;
             System.out.println("+");
-            View.display.setText(getDisplay() + "+");
+            input.append("+");
+            operar();
         }
 
     }
@@ -375,8 +409,9 @@ class Controller{
     static void clickNum0() {
 
         if(!(getDisplay().equals("0")||getDisplay().equals("")||getDisplay().equals(error))){
-            View.display.setText(getDisplay()+"0");
             System.out.println("0");
+            input.append("0");
+            View.update();
             operacionFlag=false;
         }
     }
@@ -384,13 +419,16 @@ class Controller{
     static void clickComa() {
         if (!comaFlag) {
             if (getDisplay().equals("")||getDisplay().equals(error)) {
-                View.display.setText("0,");
+                input.delete(0,input.length());
+                input.append("0.");
+                View.update();
                 comaFlag = true;
             } else {
-                View.display.setText(getDisplay() + ",");
+                input.append(".");
+                View.update();
                 comaFlag = true;
             }
-            System.out.println(",");
+            System.out.println(".");
         }
     }
 
