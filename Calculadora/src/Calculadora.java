@@ -16,8 +16,6 @@ public class Calculadora {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> View.crearVentana());
-        Double test = Double.parseDouble("37.5");
-        System.out.println(test);
     }
 }
 
@@ -51,10 +49,10 @@ class View extends JPanel {
         gc.weighty=pesoy;
     }
     static void update(){
-        String salida = Double.toString(Controller.num2);
+         //String salida = Double.toString(Controller.num2);
         display.setText(Controller.input.toString());
-        System.out.println("num2 "+Controller.num2);
-        System.out.println("num1 "+Controller.num1);
+        System.out.println("num2 (input): "+Controller.num2
+                +"   num1(acumulado): "+Controller.num1 + "   pantalla:" + Controller.input.toString());
     }
      View(){
         this.setLayout(new GridBagLayout());
@@ -225,6 +223,8 @@ class Controller{
     static boolean comaFlag=false;
     static String operacion;
     static boolean operacionFlag=false;
+    static boolean primerNumero=true;
+    static boolean igualFlag=false;
     static double num1=0;
     static double num2=0;
     static StringBuffer input= new StringBuffer();
@@ -234,35 +234,58 @@ class Controller{
         return View.display.getText();
     }
     static void operar(){
-        num1 = Double.parseDouble(input.delete(input.length()-1,input.length()).toString());
-        input.delete(0,input.length());
-        switch(operacion){
-            case "*":num2=num1*num2;
-            break;
-            case "+":num1=num1+num2;
-            break;
-            case "-":num1=num1-num2;
-            break;
-            case "/":num1=num1/num2;
-            break;
-            case "raiz": num2=Math.sqrt(num2);
-            break;
-            case "potencia": num2=Math.pow(num2,2);
-            break;
+        if (primerNumero){
+            num1 = Double.parseDouble(input.toString());
+            primerNumero=false;
         }
-        operacionFlag=false;
-        operacion="";
-        View.update();
+        else {
+            if (operacion.equals("=")){
+                num2=0;
+            }
+            else try {
+                num2 = Double.parseDouble(input.toString());
+                switch (operacion) {
+                    case "x":
+                        num1 = num1 * num2;
+                        break;
+                    case "+":
+                        num1 = num1 + num2;
+                        break;
+                    case "-":
+                        num1 = num1 - num2;
+                        break;
+                    case "/":
+                        num1 = num1 / num2;
+                        break;
+                    case "raiz":
+                        num2 = Math.sqrt(num2);
+                        break;
+                    //case "potencia":
+                        //num2 = Math.pow(num2, 2);
+                        //break;
+                    case "=": num2=0; input.delete(0,input.length());
+                        break;
+                }
+            } catch (NumberFormatException e){}
+        }
+        //operacionFlag=false;
+        //View.update();
+        View.display.setText(Double.toString(num1));
+        input.delete(0,input.length());
+        System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f",primerNumero,operacion, num1,num2);
     }
 
     static void clickPotencia() {
-        System.out.println("Potencia");
         if (!operacionFlag){
             operacion = "potencia";
             operacionFlag = true;
             comaFlag=false;
             //input.append("");
-            operar();
+            num2 = Double.parseDouble(input.toString());
+            num2 = Math.pow(num2, 2);
+            View.display.setText(Double.toString(num2));
+            System.out.println("Potencia");
+            //operar();
         }
     }
 
@@ -275,107 +298,104 @@ class Controller{
         comaFlag=false;
         operacionFlag=false;
         operacion="";
+        primerNumero=true;
+
     }
 
     static void clickClear() {
         System.out.println("Clear");
         input.delete(0,input.length());
+        num2=0;
         View.update();
         comaFlag=false;
         operacionFlag=false;
         operacion="";
+
     }
 
 
     static void clickDividir() {
-        System.out.println("Dividir");
         if (!operacionFlag){
+            operar();
             operacion = "/";
             operacionFlag = true;
             comaFlag=false;
-            input.append("/");
-            operar();
+            //input.append("/");
+            System.out.println("Dividir");
         }
     }
 
     static void clickRaiz() {
-        System.out.println("Raiz");
+
         if (!operacionFlag){
+            operar();
             operacion = "raiz";
             operacionFlag = true;
             comaFlag=false;
             //input.append("");
-            operar();
+            System.out.println("Raiz");
         }
     }
 
     static void clickNum7() {
-        System.out.println("7");
         input.append("7");
         View.update();
         operacionFlag=false;
     }
 
     static void clickNum8() {
-        System.out.println("8");
         input.append("8");
         View.update();
         operacionFlag=false;
     }
 
     static void clickNum9() {
-        System.out.println("9");
         input.append("9");
         View.update();
         operacionFlag=false;
     }
 
     static void clickMultiplicar() {
-        System.out.println("X");
         if (!operacionFlag){
-            operacion = "x";
             operacionFlag = true;
             comaFlag=false;
-            input.append("*");
             operar();
+            operacion = "x";
+            //input.append("*");
+            System.out.println("X");
         }
     }
 
     static void clickNum4() {
-        System.out.println("4");
         input.append("4");
         View.update();
         operacionFlag=false;
     }
 
     static void clickNum5() {
-        System.out.println("5");
         input.append("5");
         View.update();
-
         operacionFlag=false;
     }
 
     static void clickNum6() {
-        System.out.println("6");
         input.append("6");
         View.update();
         operacionFlag=false;
     }
 
     static void clickRestar() {
-        if (!(operacionFlag||getDisplay().equals("-")||getDisplay().equals(error))){
-            operacion = "-";
+        if (!(operacionFlag||input.equals("-")||input.equals(error))){
             operacionFlag = true;
             comaFlag=false;
             System.out.println("-");
-            input.append("-");
             operar();
+            operacion = "-";
+            //input.append("-");
         }
     }
 
     static void clickNum1() {
-        System.out.println("1");
         input.append("1");
         View.update();
         operacionFlag=false;
@@ -388,26 +408,23 @@ class Controller{
     }
 
     static void clickNum3() {
-        System.out.println("3");
         input.append("3");
         View.update();
         operacionFlag=false;
     }
 
     static void clickSumar() {
-        if (!(operacionFlag||getDisplay().equals("")||getDisplay().equals(error))) {
-            operacion = "+";
+        if (!(operacionFlag||input.equals("")||input.equals(error))) {
             operacionFlag = true;
             comaFlag=false;
             System.out.println("+");
-            input.append("+");
             operar();
+            operacion = "+";
         }
 
     }
 
     static void clickNum0() {
-
         if(!(getDisplay().equals("0")||getDisplay().equals("")||getDisplay().equals(error))){
             System.out.println("0");
             input.append("0");
@@ -434,10 +451,8 @@ class Controller{
 
     static void clickIgual() throws ScriptException {
         System.out.println("=");
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        Object parcial = engine.eval(getDisplay());
-
-        View.display.setText(parcial.toString());
+        operar();
+        operacion="=";
+        View.display.setText(Double.toString(num1));
     }
 }
