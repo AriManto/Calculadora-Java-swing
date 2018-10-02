@@ -224,7 +224,7 @@ class Controller{
     static String operacion;
     static boolean operacionFlag=false;
     static boolean primerNumero=true;
-    static boolean igualFlag=false;
+    static boolean signoFlag=false;
     static double num1=0;
     static double num2=0;
     static StringBuffer input= new StringBuffer();
@@ -255,7 +255,8 @@ class Controller{
                         num1 = num1 - num2;
                         break;
                     case "/":
-                        num1 = num1 / num2;
+                        if (num2==0){View.display.setText("BIJA");return;}
+                        else {num1 = num1 / num2;}
                         break;
                     case "raiz":
                         num2 = Math.sqrt(num2);
@@ -270,23 +271,25 @@ class Controller{
         }
         //operacionFlag=false;
         //View.update();
-        View.display.setText(Double.toString(num1));
+        //View.display.setText(Double.toString(num1));
         input.delete(0,input.length());
-        System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f",primerNumero,operacion, num1,num2);
+        System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f\n",primerNumero,operacion, num1,num2);
     }
 
     static void clickPotencia() {
-        if (!operacionFlag){
-            operacion = "potencia";
-            operacionFlag = true;
+        //if (!operacionFlag){
+            //operacion = "potencia";
+            //operacionFlag = true;
             comaFlag=false;
-            //input.append("");
+            if (input.toString().equals("")||num2==0){num2=num1;}
             num2 = Double.parseDouble(input.toString());
             num2 = Math.pow(num2, 2);
+            input.delete(0,input.length());
+            input.append(num2);
             View.display.setText(Double.toString(num2));
             System.out.println("Potencia");
             //operar();
-        }
+        //}
     }
 
     static void clickAllClear() {
@@ -306,7 +309,7 @@ class Controller{
         System.out.println("Clear");
         input.delete(0,input.length());
         num2=0;
-        View.update();
+        View.display.setText(Double.toString(num1));
         comaFlag=false;
         operacionFlag=false;
         operacion="";
@@ -326,15 +329,22 @@ class Controller{
     }
 
     static void clickRaiz() {
-
-        if (!operacionFlag){
+        comaFlag=false;
+        if (input.toString().equals("")||num2==0){num2=num1;}
+        num2 = Double.parseDouble(input.toString());
+        num2 = Math.sqrt(num2);
+        input.delete(0,input.length());
+        input.append(num2);
+        View.display.setText(Double.toString(num2));
+        System.out.println("Potencia");
+        /*if (!operacionFlag){
             operar();
             operacion = "raiz";
             operacionFlag = true;
             comaFlag=false;
             //input.append("");
             System.out.println("Raiz");
-        }
+        }*/
     }
 
     static void clickNum7() {
@@ -385,7 +395,11 @@ class Controller{
     }
 
     static void clickRestar() {
-        if (!(operacionFlag||input.equals("-")||input.equals(error))){
+        /*if (primerNumero||!signoFlag){
+            input.append("-");
+            signoFlag=false;
+        }else*/
+        if (!(operacionFlag||input.toString().equals("-")||input.toString().equals(error))){
             operacionFlag = true;
             comaFlag=false;
             System.out.println("-");
