@@ -1,7 +1,5 @@
-
 import javax.swing.*;
 import java.awt.*;
-//todo: al poner igual, guardar la raiz / potencia
 //todo: poder poner numeros negativos (detectar si operacion es -)
 //todo: display de operacion
 //todo: apariencia de botones
@@ -45,8 +43,8 @@ class View extends JPanel {
     static void update(){
          //String salida = Double.toString(Controller.num2);
         display.setText(Controller.input.toString());
-        System.out.println("num2 (input): "+Controller.num2
-                +"   num1(acumulado): "+Controller.num1 + "   pantalla:" + Controller.input.toString());
+        System.out.println("num1 (acumulado): "+Controller.num1
+                +"   num2(nuevo): "+Controller.num2 + "   input:" + Controller.input.toString());
     }
      View(){
         this.setLayout(new GridBagLayout());
@@ -84,17 +82,17 @@ class View extends JPanel {
         clear.addActionListener(e-> Controller.clickClear());
         this.add(clear,gc);
         //
-         JButton raiz = new JButton("√");
-         raiz.setFont(new Font("Tahoma",Font.PLAIN,20));
-         posicionCelda(2,2);
-         raiz.addActionListener(e-> Controller.clickRaiz());
-         this.add(raiz,gc);
+        JButton raiz = new JButton("√");
+        raiz.setFont(new Font("Tahoma",Font.PLAIN,20));
+        posicionCelda(2,2);
+        raiz.addActionListener(e-> Controller.clickRaiz());
+        this.add(raiz,gc);
         //
-         JButton potencia = new JButton("X²");
-         potencia.setFont(new Font("Tahoma",Font.PLAIN,20));
-         posicionCelda(3,2);
-         potencia.addActionListener(e-> Controller.clickPotencia());
-         this.add(potencia,gc);
+        JButton potencia = new JButton("X²");
+        potencia.setFont(new Font("Tahoma",Font.PLAIN,20));
+        posicionCelda(3,2);
+        potencia.addActionListener(e-> Controller.clickPotencia());
+        this.add(potencia,gc);
 
 
         //               Y=3
@@ -116,12 +114,12 @@ class View extends JPanel {
         posicionCelda(2,3);
         num9.addActionListener(e->Controller.clickNum9());
         this.add(num9,gc);
-         //
-         JButton dividir = new JButton("/");
-         dividir.setFont(new Font("Tahoma",Font.PLAIN,20));
-         posicionCelda(3,3);
-         dividir.addActionListener(e-> Controller.clickDividir());
-         this.add(dividir,gc);
+        //
+        JButton dividir = new JButton("/");
+        dividir.setFont(new Font("Tahoma",Font.PLAIN,20));
+        posicionCelda(3,3);
+        dividir.addActionListener(e-> Controller.clickDividir());
+        this.add(dividir,gc);
 
         //Y=4
         //
@@ -143,11 +141,11 @@ class View extends JPanel {
         num6.addActionListener(e->Controller.clickNum6());
         this.add(num6,gc);
         //
-         JButton multiplicar = new JButton("X");
-         multiplicar.setFont(new Font("Tahoma",Font.PLAIN,20));
-         posicionCelda(3,4);
-         multiplicar.addActionListener(e->Controller.clickMultiplicar());
-         this.add(multiplicar,gc);
+        JButton multiplicar = new JButton("X");
+        multiplicar.setFont(new Font("Tahoma",Font.PLAIN,20));
+        posicionCelda(3,4);
+        multiplicar.addActionListener(e->Controller.clickMultiplicar());
+        this.add(multiplicar,gc);
 
         //Y=5
         //
@@ -169,11 +167,11 @@ class View extends JPanel {
         num3.addActionListener(e->Controller.clickNum3());
         this.add(num3,gc);
         //
-         JButton restar = new JButton("—");
-         restar.setFont(new Font("Tahoma",Font.PLAIN,20));
-         posicionCelda(3,5);
-         restar.addActionListener(e->Controller.clickRestar());
-         this.add(restar,gc);
+        JButton restar = new JButton("—");
+        restar.setFont(new Font("Tahoma",Font.PLAIN,20));
+        posicionCelda(3,5);
+        restar.addActionListener(e->Controller.clickRestar());
+        this.add(restar,gc);
 
 
         //Y=6
@@ -197,11 +195,13 @@ class View extends JPanel {
         posicionCelda(2,6);
         igual.addActionListener(e-> Controller.clickIgual());
         this.add(igual,gc);
-         JButton sumar = new JButton("+");
-         sumar.setFont(new Font("Tahoma",Font.PLAIN,20));
-         posicionCelda(3,6);
-         sumar.addActionListener(e->Controller.clickSumar());
-         this.add(sumar,gc);
+
+        //
+        JButton sumar = new JButton("+");
+        sumar.setFont(new Font("Tahoma",Font.PLAIN,20));
+        posicionCelda(3,6);
+        sumar.addActionListener(e->Controller.clickSumar());
+        this.add(sumar,gc);
     }
 }
 
@@ -210,7 +210,7 @@ class Controller{
     static String error = "No se puede dividir por 0";
     static boolean comaFlag=false;
     static String operacion;
-    static boolean operacionFlag=false;
+    static boolean operacionFlag=true;
     static boolean primerNumero=true;
     static boolean exponenteFlag=false;
     static boolean blockInput=false;
@@ -245,25 +245,15 @@ class Controller{
                         num1 = num1 - num2;
                         break;
                     case "/":
-                        /*if (num2==0){
-                            System.out.println("Error"); break;}
-                        else*/ {num1 = num1 / num2;}
+                        num1 = num1 / num2;
                         break;
-                    /*case "raiz":
-                        num2 = Math.sqrt(num2);
-                        break;*/
-                    //case "potencia":
-                        //num2 = Math.pow(num2, 2);
-                        //break;
                     case "=":
-                            if(exponenteFlag){exponenteFlag=false;}
+                            if(exponenteFlag){exponenteFlag=false;num1=num2;}
                             else{num2=0;input.delete(0,input.length());}
                         break;
                 }
             } catch (NumberFormatException e){/**/}
         }
-        //operacionFlag=false;
-        //View.update();
         View.display.setText(Double.toString(num1));
         input.delete(0,input.length());
         System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f\n",primerNumero,operacion, num1,num2);
@@ -271,7 +261,7 @@ class Controller{
 
     static void clickPotencia() {
             comaFlag=false;
-            if (input.toString().equals("")||num2==0){num2=num1;}
+            if (input.toString().equals("") && (num2 == 0)){num2=num1;}
             else {num2 = Double.parseDouble(input.toString());}
             num2 = Math.pow(num2, 2);
             input.delete(0,input.length());
@@ -299,12 +289,13 @@ class Controller{
         System.out.println("Clear");
         input.delete(0,input.length());
         num2=0;
-        if (num1==0){View.display.setText("");}
+        blockInput=true;
+        if (num1==0){View.display.setText(""); blockInput=false;}//
         else {View.display.setText(Double.toString(num1));}
         comaFlag=false;
         operacionFlag=false;
         operacion="";
-        blockInput=true;
+
     }
 
 
@@ -321,10 +312,8 @@ class Controller{
 
     static void clickRaiz() {
         comaFlag=false;
-        try {num2 = Double.parseDouble(input.toString());}
-        catch (NumberFormatException e){
-            num2 = num1;
-        }
+        if (input.toString().equals("") && (num2 == 0)){num2=num1;}
+        else {num2 = Double.parseDouble(input.toString());}
         num2 = Math.sqrt(num2);
         input.delete(0,input.length());
         input.append(num2);
