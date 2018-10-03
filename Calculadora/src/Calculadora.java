@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-//todo: display de operacion
 //todo: apariencia de botones
+//todo: bug de "si num1 !=0 y num2 !=0 e input "", potencia agarra y guarda num2"
+//todo: refactoring code for readibility, limpiar los system out
 
 public class Calculadora {
 
@@ -14,6 +15,7 @@ public class Calculadora {
 class View extends JPanel {
     static JTextField display = new JTextField("");
     static JTextField displayOperador = new JTextField("");
+
 
     static void crearVentana() {
         //Opciones básicas
@@ -215,30 +217,29 @@ class View extends JPanel {
 
 
 class Controller{
-    static String error = "No se puede dividir por 0";
-    static boolean comaFlag=false;
+    static private String error = "No se puede dividir por 0";
+    static private boolean comaFlag=false;
     static String operacion;
-    static boolean operacionFlag=true;
-    static boolean primerNumero=true;
+    static private boolean operacionFlag=true;
+    static private boolean primerNumero=true;
     static boolean exponenteFlag=false;
-    static boolean blockInput=false;
+    static private boolean blockInput=false;
     static boolean signoFlag=false;
     static double num1=0;
     static double num2=0;
     static StringBuffer input= new StringBuffer();
 
 
-    static String getDisplay(){
+    static private String getDisplay(){
         return View.display.getText();
     }
-    static void operar(){
+    static private void operar(){
         if (primerNumero){
             num1=num2;
             try{num1 = Double.parseDouble(input.toString());}
             catch(NumberFormatException e){}
             primerNumero=false;
         }
-
         else { //NO PRIMER NUMERO
             if (input.toString().equals("")){
             exponenteFlag=false;
@@ -292,6 +293,29 @@ class Controller{
             System.out.println("Potencia");
     }
 
+    static void clickRaiz() {
+        comaFlag=false;
+        if (input.toString().equals("")){ //String null
+            if ((num2 == 0)&& !(num1==0)) {//
+                num2 = Math.sqrt(num1);
+            } else if ((num2 == 0)&& (num1==0)) {//
+                num2 = Math.sqrt(num2);
+            }
+            else if (!(num2 == 0)&& !(num1==0)) {//
+                num2 = Math.sqrt(num2);
+            }
+        }
+        else {  //Caso standard
+            num2 = Double.parseDouble(input.toString());
+            num2 = Math.sqrt(num2);
+        }
+        View.display.setText(Double.toString(num2));
+        input.delete(0,input.length());
+        exponenteFlag = true;
+        blockInput=true;
+        System.out.println("Raiz");
+    }
+
     static void clickAllClear() {
         System.out.println("AllClear");
         input.delete(0,input.length());
@@ -321,10 +345,9 @@ class Controller{
 
     }
 
-
     static void clickDividir() {
         if (!operacionFlag){
-            if(!blockInput){operar();}
+            if(!blockInput||blockInput&&primerNumero){operar();}
             blockInput=false;
             operacion = "/";
             View.displayOperador.setText(operacion);
@@ -334,97 +357,16 @@ class Controller{
         }
     }
 
-    static void clickRaiz() {
-        /*comaFlag=false;
-        if (input.toString().equals("") || (num2 == 0) || (num1 == 0)){num2=num1;}
-        else {num2 = Double.parseDouble(input.toString());}
-        num2 = Math.sqrt(num2);
-        input.delete(0,input.length());
-        input.append(num2);
-        View.display.setText(Double.toString(num2));
-        exponenteFlag = true;
-        blockInput=true;
-        System.out.println("Raiz");*/
-        comaFlag=false;
-        if (input.toString().equals("")){ //String null
-            if ((num2 == 0)&& !(num1==0)) {//
-                num2 = Math.sqrt(num1);
-            } else if ((num2 == 0)&& (num1==0)) {//
-                num2 = Math.sqrt(num2);
-            }
-            else if (!(num2 == 0)&& !(num1==0)) {//
-                num2 = Math.sqrt(num2);
-            }
-        }
-        else {  //Caso standard
-            num2 = Double.parseDouble(input.toString());
-            num2 = Math.sqrt(num2);
-        }
-        View.display.setText(Double.toString(num2));
-        input.delete(0,input.length());
-        exponenteFlag = true;
-        blockInput=true;
-        System.out.println("Raiz");
-    }
-
-    static void clickNum7() {
-        if(!blockInput){
-            input.append("7");
-            View.update();
-            operacionFlag=false;
-        }
-    }
-
-    static void clickNum8() {
-        if(!blockInput) {
-            input.append("8");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum9() {
-        if(!blockInput) {
-            input.append("9");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
     static void clickMultiplicar() {
         if (!operacionFlag){
             operacionFlag = true;
             comaFlag=false;
-            if(!blockInput){operar();}
+            if(!blockInput||blockInput&&primerNumero){operar();}
             blockInput=false;
             operacion = "x";
             View.displayOperador.setText(operacion);
             //input.append("*");
             System.out.println("X");
-        }
-    }
-
-    static void clickNum4() {
-        if(!blockInput) {
-            input.append("4");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum5() {
-        if(!blockInput) {
-            input.append("5");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum6() {
-        if(!blockInput) {
-            input.append("6");
-            View.update();
-            operacionFlag = false;
         }
     }
 
@@ -446,17 +388,61 @@ class Controller{
         }
     }
 
-    static void clickNum1() {
+    static void clickSumar() {
+        if (!operacionFlag) {
+            operacionFlag = true;
+            comaFlag=false;
+            System.out.println("+");
+            if(!blockInput||blockInput&&primerNumero){operar();}
+            operacion = "+";
+            View.displayOperador.setText(operacion);
+            blockInput=false;
+        }
+    }
+
+    static void clickNum9() {
         if(!blockInput) {
-            input.append("1");
+            input.append("9");
             View.update();
             operacionFlag = false;
         }
     }
 
-    static void clickNum2() {
+    static void clickNum8() {
         if(!blockInput) {
-            input.append("2");
+            input.append("8");
+            View.update();
+            operacionFlag = false;
+        }
+    }
+
+    static void clickNum7() {
+        if(!blockInput){
+            input.append("7");
+            View.update();
+            operacionFlag=false;
+        }
+    }
+
+    static void clickNum6() {
+        if(!blockInput) {
+            input.append("6");
+            View.update();
+            operacionFlag = false;
+        }
+    }
+
+    static void clickNum5() {
+        if(!blockInput) {
+            input.append("5");
+            View.update();
+            operacionFlag = false;
+        }
+    }
+
+    static void clickNum4() {
+        if(!blockInput) {
+            input.append("4");
             View.update();
             operacionFlag = false;
         }
@@ -470,15 +456,19 @@ class Controller{
         }
     }
 
-    static void clickSumar() {
-        if (!operacionFlag) {
-            operacionFlag = true;
-            comaFlag=false;
-            System.out.println("+");
-            if(!blockInput||blockInput&&primerNumero){operar();}
-            operacion = "+";
-            View.displayOperador.setText(operacion);
-            blockInput=false;
+    static void clickNum2() {
+        if(!blockInput) {
+            input.append("2");
+            View.update();
+            operacionFlag = false;
+        }
+    }
+
+    static void clickNum1() {
+        if(!blockInput) {
+            input.append("1");
+            View.update();
+            operacionFlag = false;
         }
     }
 
