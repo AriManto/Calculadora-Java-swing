@@ -233,6 +233,7 @@ class Controller{
     }
     static void operar(){
         if (primerNumero){
+            num1=num2;
             try{num1 = Double.parseDouble(input.toString());}
             catch(NumberFormatException e){}
             primerNumero=false;
@@ -334,13 +335,33 @@ class Controller{
     }
 
     static void clickRaiz() {
-        comaFlag=false;
+        /*comaFlag=false;
         if (input.toString().equals("") || (num2 == 0) || (num1 == 0)){num2=num1;}
         else {num2 = Double.parseDouble(input.toString());}
         num2 = Math.sqrt(num2);
         input.delete(0,input.length());
         input.append(num2);
         View.display.setText(Double.toString(num2));
+        exponenteFlag = true;
+        blockInput=true;
+        System.out.println("Raiz");*/
+        comaFlag=false;
+        if (input.toString().equals("")){ //String null
+            if ((num2 == 0)&& !(num1==0)) {//
+                num2 = Math.sqrt(num1);
+            } else if ((num2 == 0)&& (num1==0)) {//
+                num2 = Math.sqrt(num2);
+            }
+            else if (!(num2 == 0)&& !(num1==0)) {//
+                num2 = Math.sqrt(num2);
+            }
+        }
+        else {  //Caso standard
+            num2 = Double.parseDouble(input.toString());
+            num2 = Math.sqrt(num2);
+        }
+        View.display.setText(Double.toString(num2));
+        input.delete(0,input.length());
         exponenteFlag = true;
         blockInput=true;
         System.out.println("Raiz");
@@ -454,7 +475,7 @@ class Controller{
             operacionFlag = true;
             comaFlag=false;
             System.out.println("+");
-            if(!blockInput){operar();}
+            if(!blockInput||blockInput&&primerNumero){operar();}
             operacion = "+";
             View.displayOperador.setText(operacion);
             blockInput=false;
