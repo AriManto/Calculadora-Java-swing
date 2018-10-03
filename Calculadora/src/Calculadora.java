@@ -64,7 +64,7 @@ class View extends JPanel {
         this.gc.insets= new Insets(5,0,5,5);
         display.setFont(new Font("Tahoma",Font.PLAIN,30));
         display.setEditable(false);
-        display.setHorizontalAlignment(SwingConstants.RIGHT);
+        display.setHorizontalAlignment(SwingConstants.CENTER);
         gc.anchor=GridBagConstraints.EAST;
         gc.gridwidth=4;
         gc.gridheight=2;
