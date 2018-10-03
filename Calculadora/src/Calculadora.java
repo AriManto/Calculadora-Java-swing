@@ -88,7 +88,8 @@ class View extends JPanel {
         posicionCelda(0,2);
         allClear.addActionListener(e-> Controller.clickAllClear());
         allClear.setUI(new StyledButtonUI());
-        //allClear.setBackground();
+        allClear.setBackground(new Color(246,81,29));
+        allClear.setForeground(new Color(255,255,255));
         this.add(allClear,gc);
         //
         JButton clear = new JButton("C");
@@ -98,6 +99,8 @@ class View extends JPanel {
         clear.setFocusPainted(false);
         clear.addActionListener(e-> Controller.clickClear());
         clear.setUI(new StyledButtonUI());
+        clear.setBackground(new Color(246,81,29));
+        clear.setForeground(new Color(255,255,255));
         this.add(clear,gc);
         //
         JButton raiz = new JButton("√");
@@ -105,6 +108,7 @@ class View extends JPanel {
         posicionCelda(2,2);
         raiz.addActionListener(e-> Controller.clickRaiz());
         raiz.setUI(new StyledButtonUI());
+        raiz.setBackground(new Color(241,143,1));
         this.add(raiz,gc);
         //
         JButton potencia = new JButton("X²");
@@ -112,6 +116,7 @@ class View extends JPanel {
         posicionCelda(3,2);
         potencia.addActionListener(e-> Controller.clickPotencia());
         potencia.setUI(new StyledButtonUI());
+        potencia.setBackground(new Color(241,143,1));
         this.add(potencia,gc);
 
 
@@ -143,6 +148,7 @@ class View extends JPanel {
         posicionCelda(3,3);
         dividir.addActionListener(e-> Controller.clickDividir());
         dividir.setUI(new StyledButtonUI());
+        dividir.setBackground(new Color(241,143,1));
         this.add(dividir,gc);
 
         //             Y=4
@@ -173,6 +179,7 @@ class View extends JPanel {
         posicionCelda(3,4);
         multiplicar.addActionListener(e->Controller.clickMultiplicar());
         multiplicar.setUI(new StyledButtonUI());
+        multiplicar.setBackground(new Color(241,143,1));
         this.add(multiplicar,gc);
 
         //            Y=5
@@ -203,6 +210,7 @@ class View extends JPanel {
         posicionCelda(3,5);
         restar.addActionListener(e->Controller.clickRestar());
         restar.setUI(new StyledButtonUI());
+        restar.setBackground(new Color(241,143,1));
         this.add(restar,gc);
 
 
@@ -234,6 +242,7 @@ class View extends JPanel {
         posicionCelda(3,6);
         sumar.addActionListener(e->Controller.clickSumar());
         sumar.setUI(new StyledButtonUI());
+        sumar.setBackground(new Color(241,143,1));
         this.add(sumar,gc);
     }
 }
