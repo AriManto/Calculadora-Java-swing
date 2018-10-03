@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-//todo: poder poner numeros negativos (detectar si operacion es -)
 //todo: display de operacion
 //todo: apariencia de botones
 
@@ -121,7 +120,7 @@ class View extends JPanel {
         dividir.addActionListener(e-> Controller.clickDividir());
         this.add(dividir,gc);
 
-        //Y=4
+        //             Y=4
         //
         JButton num4 = new JButton("4");
         num4.setFont(new Font("Tahoma",Font.PLAIN,20));
@@ -147,7 +146,7 @@ class View extends JPanel {
         multiplicar.addActionListener(e->Controller.clickMultiplicar());
         this.add(multiplicar,gc);
 
-        //Y=5
+        //            Y=5
         //
         JButton num1 = new JButton("1");
         num1.setFont(new Font("Tahoma",Font.PLAIN,20));
@@ -174,7 +173,7 @@ class View extends JPanel {
         this.add(restar,gc);
 
 
-        //Y=6
+        //              Y=6
         //
          JButton coma = new JButton(".");
          coma.setFont(new Font("Tahoma",Font.PLAIN,20));
@@ -188,14 +187,11 @@ class View extends JPanel {
         num0.addActionListener(e->Controller.clickNum0());
         this.add(num0,gc);
         //
-
-        //
         JButton igual = new JButton("=");
         igual.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,6);
         igual.addActionListener(e-> Controller.clickIgual());
         this.add(igual,gc);
-
         //
         JButton sumar = new JButton("+");
         sumar.setFont(new Font("Tahoma",Font.PLAIN,20));
@@ -256,7 +252,7 @@ class Controller{
         }
         View.display.setText(Double.toString(num1));
         input.delete(0,input.length());
-        System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f\n",primerNumero,operacion, num1,num2);
+        System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f, input %s\n",primerNumero,operacion, num1,num2,input.toString());
     }
 
     static void clickPotencia() {
@@ -384,7 +380,13 @@ class Controller{
     }
 
     static void clickRestar() {
-        if (!(operacionFlag||input.toString().equals("-")||input.toString().equals(error))){
+        if (input.toString().equals("")&&operacionFlag){
+            input.append("-");
+            signoFlag=true;
+            View.update();
+            blockInput=false;
+        }
+        else if (!operacionFlag){
             operacionFlag = true;
             comaFlag=false;
             System.out.println("-");
@@ -457,7 +459,6 @@ class Controller{
     }
 
     static void clickIgual(){
-        System.out.println("=");
         operar();
         operacion="=";
         View.display.setText(Double.toString(num1));
