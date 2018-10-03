@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 //todo: apariencia de botones
 //todo: bug de "si num1 !=0 y num2 !=0 e input "", potencia agarra y guarda num2"
@@ -85,6 +87,8 @@ class View extends JPanel {
         allClear.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(0,2);
         allClear.addActionListener(e-> Controller.clickAllClear());
+        allClear.setUI(new StyledButtonUI());
+        //allClear.setBackground();
         this.add(allClear,gc);
         //
         JButton clear = new JButton("C");
@@ -93,18 +97,21 @@ class View extends JPanel {
         clear.setBorderPainted(false);
         clear.setFocusPainted(false);
         clear.addActionListener(e-> Controller.clickClear());
+        clear.setUI(new StyledButtonUI());
         this.add(clear,gc);
         //
         JButton raiz = new JButton("√");
         raiz.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,2);
         raiz.addActionListener(e-> Controller.clickRaiz());
+        raiz.setUI(new StyledButtonUI());
         this.add(raiz,gc);
         //
         JButton potencia = new JButton("X²");
         potencia.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(3,2);
         potencia.addActionListener(e-> Controller.clickPotencia());
+        potencia.setUI(new StyledButtonUI());
         this.add(potencia,gc);
 
 
@@ -114,24 +121,28 @@ class View extends JPanel {
         num7.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(0,3);
         num7.addActionListener(e->Controller.clickNum7());
+        num7.setUI(new StyledButtonUI());
         this.add(num7,gc);
         //
         JButton num8 = new JButton("8");
         num8.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(1,3);
         num8.addActionListener(e->Controller.clickNum8());
+        num8.setUI(new StyledButtonUI());
         this.add(num8,gc);
         //
         JButton num9 = new JButton("9");
         num9.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,3);
         num9.addActionListener(e->Controller.clickNum9());
+        num9.setUI(new StyledButtonUI());
         this.add(num9,gc);
         //
         JButton dividir = new JButton("/");
         dividir.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(3,3);
         dividir.addActionListener(e-> Controller.clickDividir());
+        dividir.setUI(new StyledButtonUI());
         this.add(dividir,gc);
 
         //             Y=4
@@ -140,24 +151,28 @@ class View extends JPanel {
         num4.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(0,4);
         num4.addActionListener(e->Controller.clickNum4());
+        num4.setUI(new StyledButtonUI());
         this.add(num4,gc);
         //
         JButton num5 = new JButton("5");
         num5.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(1,4);
         num5.addActionListener(e->Controller.clickNum5());
+        num5.setUI(new StyledButtonUI());
         this.add(num5,gc);
         //
         JButton num6 = new JButton("6");
         num6.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,4);
         num6.addActionListener(e->Controller.clickNum6());
+        num6.setUI(new StyledButtonUI());
         this.add(num6,gc);
         //
         JButton multiplicar = new JButton("X");
         multiplicar.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(3,4);
         multiplicar.addActionListener(e->Controller.clickMultiplicar());
+        multiplicar.setUI(new StyledButtonUI());
         this.add(multiplicar,gc);
 
         //            Y=5
@@ -166,51 +181,59 @@ class View extends JPanel {
         num1.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(0,5);
         num1.addActionListener(e->Controller.clickNum1());
+        num1.setUI(new StyledButtonUI());
         this.add(num1,gc);
         //
         JButton num2 = new JButton("2");
         num2.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(1,5);
         num2.addActionListener(e->Controller.clickNum2());
+        num2.setUI(new StyledButtonUI());
         this.add(num2,gc);
         //
         JButton num3 = new JButton("3");
         num3.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,5);
         num3.addActionListener(e->Controller.clickNum3());
+        num3.setUI(new StyledButtonUI());
         this.add(num3,gc);
         //
         JButton restar = new JButton("—");
         restar.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(3,5);
         restar.addActionListener(e->Controller.clickRestar());
+        restar.setUI(new StyledButtonUI());
         this.add(restar,gc);
 
 
         //              Y=6
         //
-         JButton coma = new JButton(".");
-         coma.setFont(new Font("Tahoma",Font.PLAIN,20));
-         posicionCelda(0,6);
-         coma.addActionListener(e->Controller.clickComa());
-         this.add(coma,gc);
+        JButton coma = new JButton(".");
+        coma.setFont(new Font("Tahoma",Font.PLAIN,20));
+        posicionCelda(0,6);
+        coma.addActionListener(e->Controller.clickComa());
+        coma.setUI(new StyledButtonUI());
+        this.add(coma,gc);
         //
         JButton num0 = new JButton("0");
         num0.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(1,6);
         num0.addActionListener(e->Controller.clickNum0());
+        num0.setUI(new StyledButtonUI());
         this.add(num0,gc);
         //
         JButton igual = new JButton("=");
         igual.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(2,6);
         igual.addActionListener(e-> Controller.clickIgual());
+        igual.setUI(new StyledButtonUI());
         this.add(igual,gc);
         //
         JButton sumar = new JButton("+");
         sumar.setFont(new Font("Tahoma",Font.PLAIN,20));
         posicionCelda(3,6);
         sumar.addActionListener(e->Controller.clickSumar());
+        sumar.setUI(new StyledButtonUI());
         this.add(sumar,gc);
     }
 }
@@ -507,5 +530,33 @@ class Controller{
         View.displayOperador.setText(Controller.operacion);
         blockInput=true;
         System.out.println("input "+ input);
+    }
+}
+
+class StyledButtonUI extends BasicButtonUI {
+
+    @Override
+    public void installUI (JComponent c) {
+        super.installUI(c);
+        AbstractButton button = (AbstractButton) c;
+        button.setOpaque(false);
+        button.setBorder(new EmptyBorder(5, 15, 5, 15));
+    }
+
+    @Override
+    public void paint (Graphics g, JComponent c) {
+        AbstractButton b = (AbstractButton) c;
+        paintBackground(g, b, b.getModel().isPressed() ? 2 : 0);
+        super.paint(g, c);
+    }
+
+    private void paintBackground (Graphics g, JComponent c, int yOffset) {
+        Dimension size = c.getSize();
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(c.getBackground().darker());
+        g.fillRoundRect(0, yOffset, size.width, size.height - yOffset, 10, 10);
+        g.setColor(c.getBackground());
+        g.fillRoundRect(0, yOffset, size.width, size.height + yOffset - 5, 10, 10);
     }
 }
