@@ -6,13 +6,14 @@ import java.awt.*;
 public class Calculadora {
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> View.crearVentana());
+        SwingUtilities.invokeLater(() -> View.crearVentana()); //Para que corra en el Event Dispatch Thread
     }
 }
 
 
 class View extends JPanel {
     static JTextField display = new JTextField("");
+    static JTextField displayOperador = new JTextField("");
 
     static void crearVentana() {
         //Opciones básicas
@@ -40,23 +41,34 @@ class View extends JPanel {
         gc.weighty=pesoy;
     }
     static void update(){
-         //String salida = Double.toString(Controller.num2);
         display.setText(Controller.input.toString());
+        displayOperador.setText(Controller.operacion);
         System.out.println("num1 (acumulado): "+Controller.num1
                 +"   num2(nuevo): "+Controller.num2 + "   input:" + Controller.input.toString());
     }
      View(){
         this.setLayout(new GridBagLayout());
         this.setBackground(new Color(66,66,66));
+        //Display de operador
         gc.fill=GridBagConstraints.BOTH;
-        this.gc.insets= new Insets(5,5,5,5);
+        this.gc.insets= new Insets(5,5,5,0);
+        displayOperador.setFont(new Font("Tahoma",Font.PLAIN,30));
+        displayOperador.setEditable(false);
+        displayOperador.setHorizontalAlignment(SwingConstants.CENTER);
+        gc.gridwidth=1;
+        gc.gridheight=2;
+        posicionCelda(0,0,1,1);
+        this.add(displayOperador,gc);
+
+        //Display de numeros
+        this.gc.insets= new Insets(5,0,5,5);
         display.setFont(new Font("Tahoma",Font.PLAIN,30));
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
         gc.anchor=GridBagConstraints.EAST;
         gc.gridwidth=4;
         gc.gridheight=2;
-        posicionCelda(0,0,1,1);
+        posicionCelda(1,0,1,1);
         this.add(display,gc);
 
 
@@ -221,48 +233,59 @@ class Controller{
     }
     static void operar(){
         if (primerNumero){
-            num1 = Double.parseDouble(input.toString());
+            try{num1 = Double.parseDouble(input.toString());}
+            catch(NumberFormatException e){}
             primerNumero=false;
         }
-        else {
-            if (operacion.equals("=")){
-                num2=0;
+
+        else { //NO PRIMER NUMERO
+            if (input.toString().equals("")){
+            exponenteFlag=false;
             }
-            else try {
-                num2 = Double.parseDouble(input.toString());
-                switch (operacion) {
-                    case "x":
-                        num1 = num1 * num2;
-                        break;
-                    case "+":
-                        num1 = num1 + num2;
-                        break;
-                    case "-":
-                        num1 = num1 - num2;
-                        break;
-                    case "/":
-                        num1 = num1 / num2;
-                        break;
-                    case "=":
-                            if(exponenteFlag){exponenteFlag=false;num1=num2;}
-                            else{num2=0;input.delete(0,input.length());}
-                        break;
-                }
-            } catch (NumberFormatException e){/**/}
+            else {num2=Double.parseDouble(input.toString());}//INPUT ASIGNADO
+            switch (operacion) {
+                case "x":
+                    num1 = num1 * num2;
+                    break;
+                case "+":
+                    num1 = num1 + num2;
+                    break;
+                case "-":
+                    num1 = num1 - num2;
+                    break;
+                case "/":
+                    num1 = num1 / num2;
+                    break;
+                case "=": num2=0;
+                        //if(exponenteFlag){exponenteFlag=false;num1=num2;}
+                        //else{num2=0;input.delete(0,input.length());}
+                    break;
+            }
         }
         View.display.setText(Double.toString(num1));
+        View.displayOperador.setText(operacion);
         input.delete(0,input.length());
         System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f, input %s\n",primerNumero,operacion, num1,num2,input.toString());
     }
 
     static void clickPotencia() {
             comaFlag=false;
-            if (input.toString().equals("") && (num2 == 0)){num2=num1;}
-            else {num2 = Double.parseDouble(input.toString());}
-            num2 = Math.pow(num2, 2);
-            input.delete(0,input.length());
-            input.append(num2);
+            if (input.toString().equals("")){ //String null
+                if ((num2 == 0)&& !(num1==0)) {//
+                    num2 = Math.pow(num1, 2);
+                } else if ((num2 == 0)&& (num1==0)) {//
+                num2 = Math.pow(num2, 2);
+                }
+                else if (!(num2 == 0)&& !(num1==0)) {//
+                num2 = Math.pow(num2, 2);
+                }
+            }
+            else {  //Caso standard
+                num2 = Double.parseDouble(input.toString());
+                num2 = Math.pow(num2, 2);
+            }
             View.display.setText(Double.toString(num2));
+            input.delete(0,input.length());
             exponenteFlag = true;
             blockInput=true;
             System.out.println("Potencia");
@@ -273,10 +296,11 @@ class Controller{
         input.delete(0,input.length());
         num1=0;
         num2=0;
+        operacion="";
         View.update();
+        exponenteFlag=false;
         comaFlag=false;
         operacionFlag=false;
-        operacion="";
         blockInput=false;
         primerNumero=true;
     }
@@ -288,9 +312,11 @@ class Controller{
         blockInput=true;
         if (num1==0){View.display.setText(""); blockInput=false;}//
         else {View.display.setText(Double.toString(num1));}
+        View.displayOperador.setText("");
         comaFlag=false;
         operacionFlag=false;
         operacion="";
+        exponenteFlag=false;
 
     }
 
@@ -300,6 +326,7 @@ class Controller{
             if(!blockInput){operar();}
             blockInput=false;
             operacion = "/";
+            View.displayOperador.setText(operacion);
             operacionFlag = true;
             comaFlag=false;
             System.out.println("Dividir");
@@ -308,7 +335,7 @@ class Controller{
 
     static void clickRaiz() {
         comaFlag=false;
-        if (input.toString().equals("") && (num2 == 0)){num2=num1;}
+        if (input.toString().equals("") || (num2 == 0) || (num1 == 0)){num2=num1;}
         else {num2 = Double.parseDouble(input.toString());}
         num2 = Math.sqrt(num2);
         input.delete(0,input.length());
@@ -350,6 +377,7 @@ class Controller{
             if(!blockInput){operar();}
             blockInput=false;
             operacion = "x";
+            View.displayOperador.setText(operacion);
             //input.append("*");
             System.out.println("X");
         }
@@ -392,6 +420,7 @@ class Controller{
             System.out.println("-");
             if(!blockInput){operar();}
             operacion = "-";
+            View.displayOperador.setText(operacion);
             blockInput=false;
         }
     }
@@ -421,12 +450,13 @@ class Controller{
     }
 
     static void clickSumar() {
-        if (!(operacionFlag||input.equals("")||input.equals(error))) {
+        if (!operacionFlag) {
             operacionFlag = true;
             comaFlag=false;
             System.out.println("+");
             if(!blockInput){operar();}
             operacion = "+";
+            View.displayOperador.setText(operacion);
             blockInput=false;
         }
     }
@@ -459,9 +489,12 @@ class Controller{
     }
 
     static void clickIgual(){
+
         operar();
         operacion="=";
         View.display.setText(Double.toString(num1));
+        View.displayOperador.setText(Controller.operacion);
         blockInput=true;
+        System.out.println("input "+ input);
     }
 }
