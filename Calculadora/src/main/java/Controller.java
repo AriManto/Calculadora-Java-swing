@@ -16,13 +16,16 @@ class Controller{
     }
 
     static private void ejecutarOperacion(){
+        //Si es primer número, num2 (input) pasa al num1 (acumulador o resultado) directamente
         if (primerNumero){
             num1=num2;
             try{num1 = Double.parseDouble(input.toString());}
             catch(NumberFormatException e){}
             primerNumero=false;
         }
+        //Si no es primer número, num1 acumula la operacion entre num1 y num2
         else { //NO PRIMER NUMERO
+            //Si no hay input, saltea el switch
             if (input.toString().equals("")){
                 exponenteFlag=false;
             }
@@ -40,7 +43,7 @@ class Controller{
                 case "/":
                     num1 = num1 / num2;
                     break;
-                case "=": num2=0;
+                case "=": num2=0; //Input es 0
                     //if(exponenteFlag){exponenteFlag=false;num1=num2;}
                     //else{num2=0;input.delete(0,input.length());}
                     break;
@@ -50,6 +53,7 @@ class Controller{
         View.displayOperador.setText(operacion);
         input.delete(0,input.length());
         System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f, input %s\n",primerNumero,operacion, num1,num2,input.toString());
+        operacion="";
     }
 
     static private void clickNum(String num){
@@ -132,7 +136,6 @@ class Controller{
         blockInput=false;
         primerNumero=true;
     }
-
     static void clickClear() {
         System.out.println("Clear");
         input.delete(0,input.length());
@@ -150,11 +153,9 @@ class Controller{
     static void clickDividir() {
         clickOperacion("/");
     }
-
     static void clickMultiplicar() {
         clickOperacion("x");
     }
-
     static void clickRestar() {
         //Número negativo
         if (input.toString().equals("")&&operacionFlag){
@@ -166,7 +167,6 @@ class Controller{
         //Operación de restar
         else clickOperacion("-");
     }
-
     static void clickSumar() {
         clickOperacion("+");
     }
