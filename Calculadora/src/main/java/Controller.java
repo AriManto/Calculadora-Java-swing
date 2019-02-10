@@ -282,7 +282,6 @@ class Controller{
     }
 
     static void clickIgual(){
-
         operar();
         operacion="=";
         View.display.setText(Double.toString(num1));
