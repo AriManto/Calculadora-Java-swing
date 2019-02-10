@@ -11,11 +11,11 @@ class Controller{
     static double num2=0;
     static StringBuffer input= new StringBuffer();
 
-
     static private String getDisplay(){
         return View.display.getText();
     }
-    static private void operar(){
+
+    static private void ejecutarOperacion(){
         if (primerNumero){
             num1=num2;
             try{num1 = Double.parseDouble(input.toString());}
@@ -50,6 +50,27 @@ class Controller{
         View.displayOperador.setText(operacion);
         input.delete(0,input.length());
         System.out.printf("Primer numero %b , operacion %s, num1 %f num2 %f, input %s\n",primerNumero,operacion, num1,num2,input.toString());
+    }
+
+    static private void clickNum(String num){
+        if(!blockInput) {
+            input.append(num);
+            View.update();
+            operacionFlag = false;
+        }
+    }
+    static private void clickOperacion(String op) {
+        if (!operacionFlag) {
+            System.out.println(op);
+            if (!blockInput || blockInput && primerNumero) {
+                ejecutarOperacion();
+            }
+            operacionFlag = true;
+            comaFlag = false;
+            blockInput = false;
+            operacion = op;
+            View.displayOperador.setText(operacion);
+        }
     }
 
     static void clickPotencia() {
@@ -124,136 +145,42 @@ class Controller{
         operacionFlag=false;
         operacion="";
         exponenteFlag=false;
-
     }
 
     static void clickDividir() {
-        if (!operacionFlag){
-            if(!blockInput||blockInput&&primerNumero){operar();}
-            blockInput=false;
-            operacion = "/";
-            View.displayOperador.setText(operacion);
-            operacionFlag = true;
-            comaFlag=false;
-            System.out.println("Dividir");
-        }
+        clickOperacion("/");
     }
 
     static void clickMultiplicar() {
-        if (!operacionFlag){
-            operacionFlag = true;
-            comaFlag=false;
-            if(!blockInput||blockInput&&primerNumero){operar();}
-            blockInput=false;
-            operacion = "x";
-            View.displayOperador.setText(operacion);
-            //input.append("*");
-            System.out.println("X");
-        }
+        clickOperacion("x");
     }
 
     static void clickRestar() {
+        //Número negativo
         if (input.toString().equals("")&&operacionFlag){
             input.append("-");
             signoFlag=true;
             View.update();
             blockInput=false;
         }
-        else if (!operacionFlag){
-            operacionFlag = true;
-            comaFlag=false;
-            System.out.println("-");
-            if(!blockInput){operar();}
-            operacion = "-";
-            View.displayOperador.setText(operacion);
-            blockInput=false;
-        }
+        //Operación de restar
+        else clickOperacion("-");
     }
 
     static void clickSumar() {
-        if (!operacionFlag) {
-            operacionFlag = true;
-            comaFlag=false;
-            System.out.println("+");
-            if(!blockInput||blockInput&&primerNumero){operar();}
-            operacion = "+";
-            View.displayOperador.setText(operacion);
-            blockInput=false;
-        }
+        clickOperacion("+");
     }
 
-    static void clickNum9() {
-        if(!blockInput) {
-            input.append("9");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum8() {
-        if(!blockInput) {
-            input.append("8");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum7() {
-        if(!blockInput){
-            input.append("7");
-            View.update();
-            operacionFlag=false;
-        }
-    }
-
-    static void clickNum6() {
-        if(!blockInput) {
-            input.append("6");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum5() {
-        if(!blockInput) {
-            input.append("5");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum4() {
-        if(!blockInput) {
-            input.append("4");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum3() {
-        if(!blockInput) {
-            input.append("3");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum2() {
-        if(!blockInput) {
-            input.append("2");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
-    static void clickNum1() {
-        if(!blockInput) {
-            input.append("1");
-            View.update();
-            operacionFlag = false;
-        }
-    }
-
+    static void clickNum9() {clickNum("9");}
+    static void clickNum8() {clickNum("8");}
+    static void clickNum7() {clickNum("7");}
+    static void clickNum6() {clickNum("6");}
+    static void clickNum5() {clickNum("5");}
+    static void clickNum4() {clickNum("4");}
+    static void clickNum3() {clickNum("3");}
+    static void clickNum2() {clickNum("2");}
+    static void clickNum1() {clickNum("1");}
+    //Necesita verificar si ya hay un 0 o null o error
     static void clickNum0() {
         if(!blockInput) {
             if (!(getDisplay().equals("0") || getDisplay().equals("") || getDisplay().equals(error))) {
@@ -282,7 +209,7 @@ class Controller{
     }
 
     static void clickIgual(){
-        operar();
+        ejecutarOperacion();
         operacion="=";
         View.display.setText(Double.toString(num1));
         View.displayOperador.setText(Controller.operacion);
