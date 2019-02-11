@@ -36,8 +36,8 @@ class View extends JPanel {
     static void update(){
         display.setText(Controller.input.toString());
         displayOperador.setText(Controller.operacion);
-        System.out.println("num1 (acumulado): "+Controller.num1
-                +"   num2(nuevo): "+Controller.num2 + "   input:" + Controller.input.toString());
+        System.out.println("Display: num1: "+Controller.num1
+                +"  |  num2 "+Controller.num2 + "  |  input:" + Controller.input.toString());
     }
     View(){
         this.setLayout(new GridBagLayout());
