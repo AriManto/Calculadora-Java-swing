@@ -82,7 +82,7 @@ class Controller{
             System.out.println(op);
             separador();
             valores();
-            if (!blockInput || blockInput && primerNumero) {
+            if (!blockInput || (blockInput && primerNumero) || (blockInput && exponenteFlag)) {
                 ejecutarOperacion();
             }
             operacionFlag = true;
@@ -102,12 +102,6 @@ class Controller{
             else {
                 num2 = Math.pow(num2, 2);
             }
-            /*else if ((num2 == 0)&& (num1==0)) {//
-                num2 = Math.pow(num2, 2);
-            }
-            else if (!(num2 == 0)&& !(num1==0)) {//
-                num2 = Math.pow(num2, 2);
-            }*/
         }
         else {  //Caso standard, toma el input y lo eleva al cuadrado, en num2
             num2 = Double.parseDouble(input.toString());
@@ -124,12 +118,12 @@ class Controller{
     static void clickRaiz() {
         comaFlag=false;
         if (input.toString().equals("")){ //String null
-            if ((num2 == 0)&& !(num1==0)) {//
+            if ((num2 == 0)&& !(num1==0)) {
                 num2 = Math.sqrt(num1);
-            } else if ((num2 == 0)&& (num1==0)) {//
+            } else if ((num2 == 0)&& (num1==0)) {
                 num2 = Math.sqrt(num2);
             }
-            else if (!(num2 == 0)&& !(num1==0)) {//
+            else if (!(num2 == 0)&& !(num1==0)) {
                 num2 = Math.sqrt(num2);
             }
         }
